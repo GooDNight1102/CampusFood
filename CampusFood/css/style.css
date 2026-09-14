@@ -63,77 +63,7 @@ p{ margin:0; }
 .container{ width:100%; max-width:1180px; margin:0 auto; padding:0 24px; }
 .eyebrow-label{ font-family:var(--font-body); font-weight:700; color:var(--citrus-600); font-size:13px; letter-spacing:.02em; }
 
-/* =========================
-   ICON SYSTEM
-   ========================= */
-
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  line-height: 0;
-}
-
-.icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* 16px - icon rất nhỏ */
-.icon-xs {
-  width: 16px;
-  height: 16px;
-}
-
-/* 18px - nút nhỏ */
-.icon-sm {
-  width: 18px;
-  height: 18px;
-}
-
-/* 20px - icon trong button */
-.icon-button {
-  width: 20px;
-  height: 20px;
-}
-
-/* 22px - header */
-.icon-header {
-  width: 22px;
-  height: 22px;
-}
-
-/* 24px - mặc định */
-.icon-md {
-  width: 24px;
-  height: 24px;
-}
-
-/* 28px - category */
-.icon-category {
-  width: 28px;
-  height: 28px;
-}
-
-/* 32px - card */
-.icon-lg {
-  width: 32px;
-  height: 32px;
-}
-
-/* 48px - empty state */
-.icon-xl {
-  width: 48px;
-  height: 48px;
-}
-
-/* 64px - empty cart */
-.icon-empty {
-  width: 64px;
-  height: 64px;
-}
+/* ---------- Buttons ---------- */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
   padding:13px 26px; border-radius:999px; border:1.5px solid transparent;
