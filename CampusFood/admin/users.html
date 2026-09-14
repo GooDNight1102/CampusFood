@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Người dùng — Quản trị CampusFood</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div><h1>Người dùng</h1><p class="sub">Danh sách tài khoản sinh viên, giảng viên và nhân sự căng tin.</p></div>
+    </div>
+
+    <div class="admin-panel">
+      <div class="toolbar">
+        <div class="search-mini"><span data-icon="search"></span><input type="text" id="user-search" placeholder="Tìm theo tên hoặc email..."></div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Người dùng</th><th>Vai trò</th><th>Số điện thoại</th><th>Mã số</th><th>Số dư ví</th><th>Ngày tạo</th></tr></thead>
+          <tbody id="users-admin-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/products.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/orders.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!cfAdminBoot('users', ['admin'])) return;
+    cfFillIcons();
+    cfRenderUsersAdmin();
+  });
+</script>
+</body>
+</html>

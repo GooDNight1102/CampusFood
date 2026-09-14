@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng ký — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div class="site-header" style="position:static;">
+  <div class="container header-row">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="11" fill="#17301F"/><path d="M11 21h18M11 21a2.2 2.2 0 0 0 0 4.4M29 21a2.2 2.2 0 0 1 0 4.4M15 25.4h10" stroke="#E0592C" stroke-width="2" stroke-linecap="round"/><path d="M20 21v-7" stroke="#EEA83A" stroke-width="2" stroke-linecap="round"/><path d="M16.7 15.4 20 14l3.3 1.4" stroke="#EEA83A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="brand-name">Campus<em>Food</em></span>
+    </a>
+  </div>
+</div>
+
+<div class="auth-shell">
+  <div class="auth-form-side">
+    <div class="auth-form-wrap">
+      <h1>Tạo tài khoản</h1>
+      <p class="sub">Đăng ký để lưu lịch sử đơn hàng và dùng Ví CampusFood.</p>
+
+      <form id="register-form">
+        <div class="role-toggle">
+          <label><input type="radio" name="role" value="student" checked><span>Sinh viên</span></label>
+          <label><input type="radio" name="role" value="teacher"><span>Giảng viên</span></label>
+        </div>
+
+        <div class="field"><label>Họ tên</label><input type="text" id="rg-name" required></div>
+        <div class="field-row">
+          <div class="field">
+            <label>Email</label>
+            <div style="display:flex; align-items:stretch;">
+              <input type="text" id="rg-email-local" placeholder="vd: minhanh2026" required style="border-top-right-radius:0; border-bottom-right-radius:0;">
+              <span id="rg-email-domain" style="display:flex; align-items:center; padding:0 14px; border:1.5px solid var(--line); border-left:none; border-top-right-radius:10px; border-bottom-right-radius:10px; background:var(--pine-100); font-weight:700; font-size:13.5px; color:var(--pine-900); white-space:nowrap;">@hvpn.edu.vn</span>
+            </div>
+            <div class="field-hint">Sinh viên dùng đuôi @hvpn.edu.vn, giảng viên dùng đuôi @vwa.edu.vn — tự động theo vai trò bạn chọn.</div>
+          </div>
+          <div class="field"><label>Số điện thoại</label><input type="tel" id="rg-phone" required></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Mật khẩu</label><input type="password" id="rg-pass" required></div>
+          <div class="field" id="f-confirm"><label>Xác nhận mật khẩu</label><input type="password" id="rg-pass2" required>
+            <div class="field-error">Mật khẩu xác nhận không khớp.</div>
+          </div>
+        </div>
+
+        <div class="role-fields active" id="fields-student">
+          <div class="field-row">
+            <div class="field"><label>Mã sinh viên</label><input type="text" id="rg-mssv" placeholder="SV2026xxxx"></div>
+            <div class="field"><label>Lớp</label><input type="text" id="rg-lop" placeholder="CNTT16A"></div>
+          </div>
+          <div class="field"><label>Khoa</label><input type="text" id="rg-khoa" placeholder="Công nghệ thông tin"></div>
+        </div>
+        <div class="role-fields" id="fields-teacher">
+          <div class="field"><label>Mã giảng viên</label><input type="text" id="rg-magv" placeholder="GVxxxx"></div>
+          <div class="field"><label>Khoa / Bộ môn</label><input type="text" id="rg-khoabomon" placeholder="Bộ môn Công nghệ phần mềm"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-8">ĐĂNG KÝ</button>
+      </form>
+      <p class="auth-foot">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+    </div>
+  </div>
+
+  <div class="auth-visual-side">
+    <div>
+      <div class="auth-quote">
+        <div class="qmark">“</div>
+        <p>Đăng ký một lần, đặt món cả học kỳ — số dư ví, lịch sử đơn đều được lưu lại.</p>
+        <div class="who">— Đội ngũ CampusFood</div>
+      </div>
+      <div class="auth-stack">
+        <div class="ticket-row-mini"><span>Tài khoản mới</span><b>Tặng 100.000đ</b></div>
+        <div class="ticket-row-mini"><span>Vào Ví CampusFood</span><b>Dùng thử ngay</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (cfCurrentUser()) window.location.href = 'profile.html';
+
+    document.querySelectorAll('input[name=role]').forEach(r => r.addEventListener('change', () => {
+      document.getElementById('fields-student').classList.toggle('active', r.value === 'student' && r.checked);
+      document.getElementById('fields-teacher').classList.toggle('active', r.value === 'teacher' && r.checked);
+      if (r.checked) document.getElementById('rg-email-domain').textContent = r.value === 'teacher' ? '@vwa.edu.vn' : '@hvpn.edu.vn';
+    }));
+
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.field').forEach(f => f.classList.remove('has-error'));
+      const role = document.querySelector('input[name=role]:checked').value;
+      const pass = document.getElementById('rg-pass').value;
+      const pass2 = document.getElementById('rg-pass2').value;
+      if (pass !== pass2){
+        document.getElementById('f-confirm').classList.add('has-error');
+        return;
+      }
+      const emailLocal = document.getElementById('rg-email-local').value.trim();
+      const emailDomain = role === 'teacher' ? 'vwa.edu.vn' : 'hvpn.edu.vn';
+      const data = {
+        role,
+        name: document.getElementById('rg-name').value.trim(),
+        email: emailLocal + '@' + emailDomain,
+        phone: document.getElementById('rg-phone').value.trim(),
+        password: pass,
+        mssv: document.getElementById('rg-mssv').value.trim(),
+        lop: document.getElementById('rg-lop').value.trim(),
+        khoa: document.getElementById('rg-khoa').value.trim(),
+        magv: document.getElementById('rg-magv').value.trim(),
+        khoabomon: document.getElementById('rg-khoabomon').value.trim(),
+      };
+      const res = cfRegister(data);
+      if (!res.ok){ cfToast(res.message, 'error'); return; }
+      cfToast('Đăng ký thành công! Chào mừng bạn đến với CampusFood.', 'success');
+      window.location.href = 'index.html';
+    });
+  });
+</script>
+</body>
+</html>

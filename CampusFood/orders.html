@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đơn hàng của tôi — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="orders">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / Đơn hàng của tôi</div>
+    <h1>Đơn hàng của tôi</h1>
+  </div>
+
+  <section class="section" style="padding-top:20px;">
+    <div class="container" style="max-width:840px;">
+      <div class="filter-bar">
+        <button class="chip active" data-status="all">Tất cả</button>
+        <button class="chip" data-status="placed">Chờ xác nhận</button>
+        <button class="chip" data-status="preparing">Đang chuẩn bị</button>
+        <button class="chip" data-status="done">Đã nhận</button>
+        <button class="chip" data-status="cancelled">Đã huỷ</button>
+      </div>
+      <div id="orders-list"></div>
+      <div class="empty-state" id="orders-empty" style="display:none;">
+        <span data-icon="receipt"></span>
+        <h3>Chưa có đơn hàng nào</h3>
+        <p>Các đơn bạn đặt sẽ hiển thị tại đây.</p>
+        <a href="menu.html" class="btn btn-primary">Đặt món ngay</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<!-- Modal đánh giá -->
+<div class="modal-overlay" id="rate-modal">
+  <div class="modal-box">
+    <h3>Đánh giá món ăn</h3>
+    <p>Chia sẻ trải nghiệm để căng tin phục vụ tốt hơn.</p>
+    <div class="stars-input mt-8" id="rate-stars" style="margin-bottom:16px;"></div>
+    <div class="field"><textarea id="rate-comment" rows="3" placeholder="Món ăn thế nào? Có đúng giờ không?"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="rate-cancel">Để sau</button>
+      <button class="btn btn-primary" id="rate-submit">Gửi đánh giá</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let CF_ORDERS_FILTER = 'all';
+  let CF_RATE_STARS = 5;
+  let CF_RATE_ORDER_CODE = null;
+
+  function renderMyOrdersList(){
+    let orders = cfMyOrders();
+    if (CF_ORDERS_FILTER !== 'all') orders = orders.filter(o => o.status === CF_ORDERS_FILTER);
+    const list = document.getElementById('orders-list');
+    const empty = document.getElementById('orders-empty');
+    if (orders.length === 0){ list.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display = 'none';
+
+    list.innerHTML = orders.map(o => `
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="eyebrow-label">${o.code}</div>
+            <div class="text-muted" style="font-size:12.5px;margin-top:2px;">${new Date(o.createdAt).toLocaleString('vi-VN')}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+            <span class="status-pill ${cfOrderStatusPillClass(o.status)}">${cfOrderStatusLabel(o.status)}</span>
+            ${o.priority ? '<span class="badge badge-bestseller" style="position:static;">Ưu tiên GV</span>' : ''}
+          </div>
+        </div>
+        <hr class="divider" style="margin:14px 0;">
+        ${o.items.map(i => `<div class="ticket-row"><span class="name">${i.name} <span class="qty">x${i.qty}</span></span><span>${cfFormatVND(i.price*i.qty)}</span></div>`).join('')}
+        <div class="summary-row total"><span>Tổng cộng</span><span>${cfFormatVND(o.total)}</span></div>
+        <div class="flex gap-12 mt-16">
+          <a href="tracking.html?code=${o.code}" class="btn btn-outline btn-sm">Xem tiến trình</a>
+          ${o.status === 'done' && !o.rating ? `<button class="btn btn-primary btn-sm" data-rate="${o.code}">Đánh giá món ăn</button>` : ''}
+          ${o.rating ? `<span class="text-muted" style="font-size:13px;align-self:center;">Bạn đã đánh giá ${o.rating.stars}★</span>` : ''}
+        </div>
+      </div>`).join('');
+
+    list.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => openRateModal(b.dataset.rate)));
+  }
+
+  function buildStarInputs(){
+    const wrap = document.getElementById('rate-stars');
+    wrap.innerHTML = Array.from({length:5}).map((_,i) => `<span data-star="${i+1}" style="cursor:pointer;">${CF_ICONS.star}</span>`).join('');
+    updateStarDisplay();
+    wrap.querySelectorAll('[data-star]').forEach(s => s.addEventListener('click', () => {
+      CF_RATE_STARS = parseInt(s.dataset.star,10); updateStarDisplay();
+    }));
+  }
+  function updateStarDisplay(){
+    document.querySelectorAll('#rate-stars [data-star]').forEach(s => {
+      s.style.color = parseInt(s.dataset.star,10) <= CF_RATE_STARS ? 'var(--gold-500)' : 'var(--line)';
+    });
+  }
+  function openRateModal(code){
+    CF_RATE_ORDER_CODE = code; CF_RATE_STARS = 5;
+    document.getElementById('rate-comment').value = '';
+    buildStarInputs();
+    document.getElementById('rate-modal').classList.add('open');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = cfRequireLogin();
+    if (!user) return;
+    renderMyOrdersList();
+
+    document.querySelectorAll('.chip[data-status]').forEach(chip => chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip[data-status]').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      CF_ORDERS_FILTER = chip.dataset.status;
+      renderMyOrdersList();
+    }));
+
+    document.getElementById('rate-cancel').addEventListener('click', () => document.getElementById('rate-modal').classList.remove('open'));
+    document.getElementById('rate-submit').addEventListener('click', () => {
+      const order = cfGetOrderByCode(CF_RATE_ORDER_CODE);
+      order.rating = { stars: CF_RATE_STARS, comment: document.getElementById('rate-comment').value.trim() };
+      cfUpdateOrder(order);
+      document.getElementById('rate-modal').classList.remove('open');
+      cfToast('Cảm ơn bạn đã đánh giá!', 'success');
+      renderMyOrdersList();
+    });
+  });
+</script>
+</body>
+</html>

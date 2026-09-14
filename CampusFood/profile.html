@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tài khoản của tôi — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="profile">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / Tài khoản</div>
+    <h1>Tài khoản của tôi</h1>
+  </div>
+
+  <section class="section" style="padding-top:20px;">
+    <div class="container" style="display:grid; grid-template-columns:280px 1fr; gap:24px; align-items:start;">
+      <div class="panel text-center">
+        <div class="avatar" id="pf-avatar" style="width:78px;height:78px;font-size:28px;margin:0 auto 16px;"></div>
+        <h3 id="pf-name-display"></h3>
+        <p class="text-muted mt-8" id="pf-role-display" style="font-size:13px;"></p>
+        <hr class="divider">
+        <ul style="text-align:left;">
+          <li style="margin-bottom:6px;"><a href="orders.html" class="btn btn-ghost btn-block" style="justify-content:flex-start;">${'ICON'} Đơn hàng của tôi</a></li>
+          <li style="margin-bottom:6px;"><a href="wallet.html" class="btn btn-ghost btn-block" style="justify-content:flex-start;">${'ICON'} Ví CampusFood</a></li>
+        </ul>
+        <button class="btn btn-outline btn-block mt-16" id="pf-logout">Đăng xuất</button>
+      </div>
+
+      <div>
+        <form class="panel" id="profile-form">
+          <h3 style="font-size:17px;margin-bottom:18px;">Thông tin cá nhân</h3>
+          <div class="field-row">
+            <div class="field"><label>Họ tên</label><input type="text" id="pf-name" required></div>
+            <div class="field"><label>Email</label><input type="email" id="pf-email" disabled></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Số điện thoại</label><input type="tel" id="pf-phone"></div>
+            <div class="field"><label>Vai trò</label><input type="text" id="pf-role" disabled></div>
+          </div>
+          <div id="pf-extra-fields"></div>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </form>
+
+        <div class="panel">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 style="font-size:17px;">Ví CampusFood</h3>
+              <p class="text-muted mt-8">Số dư khả dụng hiện tại</p>
+            </div>
+            <div style="font-family:var(--font-display); font-size:26px; color:var(--pine-900);" id="pf-wallet-balance">0đ</div>
+          </div>
+          <a href="wallet.html" class="btn btn-outline btn-block mt-16">Quản lý ví</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = cfRequireLogin();
+    if (!user) return;
+
+    document.getElementById('pf-avatar').textContent = user.avatarInitial;
+    document.getElementById('pf-name-display').textContent = user.name;
+    document.getElementById('pf-role-display').textContent = cfRoleLabel(user.role);
+    document.getElementById('pf-name').value = user.name;
+    document.getElementById('pf-email').value = user.email;
+    document.getElementById('pf-phone').value = user.phone || '';
+    document.getElementById('pf-role').value = cfRoleLabel(user.role);
+    document.getElementById('pf-wallet-balance').textContent = cfFormatVND(user.walletBalance);
+
+    const extra = document.getElementById('pf-extra-fields');
+    if (user.role === 'student'){
+      extra.innerHTML = `<div class="field-row">
+        <div class="field"><label>Lớp</label><input type="text" id="pf-lop" value="${user.lop||''}"></div>
+        <div class="field"><label>Khoa</label><input type="text" id="pf-khoa" value="${user.khoa||''}" disabled></div>
+      </div>`;
+    } else if (user.role === 'teacher'){
+      extra.innerHTML = `<div class="field"><label>Khoa / Bộ môn</label><input type="text" id="pf-khoabomon" value="${user.khoabomon||''}" disabled></div>`;
+    }
+
+    // đổi icon placeholder trong menu nhanh
+    document.querySelectorAll('a.btn-ghost').forEach((a,i) => {
+      a.innerHTML = a.innerHTML.replace('${\'ICON\'}', i === 0 ? CF_ICONS.receipt : CF_ICONS.wallet);
+    });
+
+    document.getElementById('profile-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const updated = { ...user };
+      updated.name = document.getElementById('pf-name').value.trim();
+      updated.phone = document.getElementById('pf-phone').value.trim();
+      if (document.getElementById('pf-lop')) updated.lop = document.getElementById('pf-lop').value.trim();
+      updated.avatarInitial = updated.name.charAt(0).toUpperCase();
+      cfUpdateUser(updated);
+      cfToast('Đã lưu thông tin tài khoản.', 'success');
+      setTimeout(() => location.reload(), 500);
+    });
+
+    document.getElementById('pf-logout').addEventListener('click', () => {
+      cfLogout();
+      window.location.href = 'index.html';
+    });
+  });
+</script>
+</body>
+</html>

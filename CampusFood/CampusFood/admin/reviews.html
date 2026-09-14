@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đánh giá — Quản trị CampusFood</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div><h1>Đánh giá từ khách hàng</h1><p class="sub">Phản hồi về món ăn và trải nghiệm nhận món.</p></div>
+    </div>
+
+    <div id="reviews-list" style="display:flex; flex-direction:column; gap:14px; max-width:720px;"></div>
+  </div>
+</div>
+
+<script src="../js/products.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/orders.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!cfAdminBoot('reviews', ['admin'])) return;
+    cfFillIcons();
+    cfRenderReviewsAdmin();
+  });
+</script>
+</body>
+</html>

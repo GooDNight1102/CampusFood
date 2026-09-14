@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ví CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="profile">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / <a href="profile.html">Tài khoản</a> / Ví CampusFood</div>
+    <h1>Ví CampusFood</h1>
+  </div>
+
+  <section class="section" style="padding-top:20px;">
+    <div class="container" style="max-width:720px;">
+      <div class="panel text-center" style="background:var(--pine-900); border:none; padding:36px;">
+        <p style="color:rgba(255,255,255,.7); font-size:13px; letter-spacing:.04em;">SỐ DƯ VÍ CAMPUSFOOD</p>
+        <div style="font-family:var(--font-display); font-size:44px; color:#fff; margin:10px 0 24px;" id="wallet-balance">0đ</div>
+        <div class="flex" style="gap:12px; justify-content:center;">
+          <button class="btn btn-primary" id="open-topup">Nạp tiền</button>
+          <a href="#wallet-history-anchor" class="btn" style="background:rgba(255,255,255,.14); color:#fff;">Lịch sử giao dịch</a>
+        </div>
+      </div>
+
+      <div class="panel" id="wallet-history-anchor">
+        <h3 style="font-size:17px;margin-bottom:16px;">Lịch sử giao dịch</h3>
+        <div id="wallet-history"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<div class="modal-overlay" id="topup-modal">
+  <div class="modal-box">
+    <h3>Nạp tiền vào ví</h3>
+    <p>Đây là bản demo — số dư sẽ được cộng ngay, không phát sinh giao dịch thật.</p>
+    <form id="topup-form">
+      <div class="field">
+        <label>Số tiền (đ)</label>
+        <input type="text" id="topup-amount" placeholder="VD: 100000" required>
+      </div>
+      <div class="flex gap-8" style="margin-bottom:18px;">
+        <button type="button" class="chip" data-quick-amount="50000">50.000đ</button>
+        <button type="button" class="chip" data-quick-amount="100000">100.000đ</button>
+        <button type="button" class="chip" data-quick-amount="200000">200.000đ</button>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="topup-cancel">Huỷ</button>
+        <button type="submit" class="btn btn-primary">Xác nhận nạp tiền</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/wallet.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    cfRenderWalletPage();
+    document.getElementById('open-topup').addEventListener('click', () => document.getElementById('topup-modal').classList.add('open'));
+    document.getElementById('topup-cancel').addEventListener('click', () => document.getElementById('topup-modal').classList.remove('open'));
+  });
+</script>
+</body>
+</html>

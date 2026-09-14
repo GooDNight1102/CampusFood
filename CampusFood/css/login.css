@@ -1,0 +1,51 @@
+/* =========================================================
+   CampusFood — Auth pages (login / register)
+   Split screen: form left, editorial "ticket wall" right
+   ========================================================= */
+
+.auth-shell{ min-height:calc(100vh - 76px); display:grid; grid-template-columns:1fr 1fr; }
+.auth-form-side{ display:flex; align-items:center; justify-content:center; padding:56px 24px; }
+.auth-form-wrap{ width:100%; max-width:400px; }
+.auth-form-wrap .brand{ margin-bottom:34px; }
+.auth-form-wrap h1{ font-size:29px; margin-bottom:8px; }
+.auth-form-wrap .sub{ color:var(--ink-70); font-size:14.5px; margin-bottom:30px; }
+
+.auth-visual-side{
+  background:var(--pine-900); position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center; padding:40px;
+}
+.auth-visual-side::before{
+  content:''; position:absolute; width:480px; height:480px; border-radius:50%;
+  background:radial-gradient(circle, rgba(224,89,44,.35), transparent 70%); top:-140px; right:-140px;
+}
+.auth-quote{ position:relative; z-index:1; color:#fff; max-width:380px; }
+.auth-quote .qmark{ font-family:var(--font-display); font-size:64px; color:var(--gold-500); line-height:.6; }
+.auth-quote p{ font-family:var(--font-display); font-size:22px; line-height:1.4; margin-top:10px; }
+.auth-quote .who{ margin-top:22px; font-size:13px; color:rgba(255,255,255,.6); font-weight:700; }
+.auth-stack{ position:relative; z-index:1; display:flex; flex-direction:column; gap:14px; margin-top:38px; }
+.auth-stack .ticket-row-mini{
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:12px;
+  padding:14px 16px; display:flex; justify-content:space-between; color:#fff; font-size:13.5px; backdrop-filter:blur(6px);
+}
+.auth-stack .ticket-row-mini b{ font-family:var(--font-display); }
+
+.role-toggle{ display:flex; gap:10px; margin-bottom:22px; }
+.role-toggle label{
+  flex:1; text-align:center; padding:12px; border:1.5px solid var(--line); border-radius:10px;
+  font-weight:700; font-size:13.5px; cursor:pointer; color:var(--ink-70);
+}
+.role-toggle input{ display:none; }
+.role-toggle input:checked + span{ color:var(--pine-900); }
+.role-toggle label:has(input:checked){ border-color:var(--pine-900); background:var(--pine-100); }
+.role-fields{ display:none; }
+.role-fields.active{ display:block; }
+
+.auth-divider{ display:flex; align-items:center; gap:12px; margin:24px 0; color:var(--ink-50); font-size:12.5px; }
+.auth-divider::before,.auth-divider::after{ content:''; flex:1; height:1px; background:var(--line); }
+.auth-foot{ text-align:center; font-size:14px; margin-top:22px; color:var(--ink-70); }
+.auth-foot a{ font-weight:800; color:var(--citrus-600); }
+
+@media (max-width: 900px){
+  .auth-shell{ grid-template-columns:1fr; }
+  .auth-visual-side{ display:none; }
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusFood — Đặt món nhanh, ăn ngon tại trường</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="home">
+
+<div id="site-header"></div>
+
+<main>
+  <!-- ===== Banner ===== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow-label">CĂNG TIN SỐ HOÁ</span>
+        <h1 class="hero-title">Đặt món nhanh<br>ăn ngon <span class="accent">tại trường</span></h1>
+        <p class="hero-sub">Đặt đồ ăn trực tuyến, thanh toán tiện lợi và chốt sẵn khung giờ lấy món — không còn xếp hàng dài giữa giờ ra chơi.</p>
+        <div class="hero-actions">
+          <a href="menu.html" class="btn btn-primary">ĐẶT MÓN NGAY</a>
+          <a href="qr-code.html" class="btn btn-outline">Quét mã QR</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>&lt; 5 phút</b><span>Thời gian giao dịch tại quầy</span></div>
+          <div class="hero-stat"><b>18+</b><span>Món ăn mỗi ngày</span></div>
+          <div class="hero-stat"><b>3</b><span>Nhóm người dùng phục vụ</span></div>
+        </div>
+      </div>
+      <div class="ticket-art">
+        <div class="ticket-card">
+          <div class="ticket-head"><b>Phiếu gọi món</b><span class="ticket-tag">Đang chuẩn bị</span></div>
+          <div class="ticket-row"><span class="name">Cơm gà sốt cay <span class="qty">x1</span></span><span>35.000đ</span></div>
+          <div class="ticket-row"><span class="name">Trà đào <span class="qty">x1</span></span><span>25.000đ</span></div>
+          <div class="ticket-row"><span class="name">Phí dịch vụ</span><span>3.000đ</span></div>
+          <div class="ticket-total"><span>Tổng cộng</span><span>63.000đ</span></div>
+        </div>
+        <div class="ticket-float tf-1"><span data-icon="clock"></span>Nhận lúc 11:30</div>
+        <div class="ticket-float tf-2">Đã thanh toán</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Danh mục ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">THỰC ĐƠN</span>
+          <h2>Chọn danh mục yêu thích</h2>
+        </div>
+        <a href="menu.html" class="btn btn-ghost">Xem toàn bộ thực đơn →</a>
+      </div>
+      <div class="stall-row" id="category-stalls"></div>
+    </div>
+  </section>
+
+  <!-- ===== Món nổi bật ===== -->
+  <section class="section" style="background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">HÔM NAY BÁN CHẠY</span>
+          <h2>Món ăn nổi bật</h2>
+          <p>Được sinh viên và giảng viên đặt nhiều nhất tuần này.</p>
+        </div>
+        <a href="menu.html" class="btn btn-ghost">Xem thêm →</a>
+      </div>
+      <div class="product-grid" id="featured-products"></div>
+    </div>
+  </section>
+
+  <!-- ===== Vì sao chọn CampusFood ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">VÌ SAO CHỌN CAMPUSFOOD</span>
+          <h2>Mọi khâu, một điểm chạm</h2>
+        </div>
+      </div>
+      <div class="stall-row">
+        <div class="stall-card">
+          <div class="stall-thumb mon" data-icon="clock"></div>
+          <h3>Chốt giờ, không chờ đợi</h3>
+          <p class="count">Chọn khung giờ nhận món phù hợp giờ nghỉ của bạn, đến lấy là có ngay.</p>
+        </div>
+        <div class="stall-card">
+          <div class="stall-thumb uong" data-icon="qr"></div>
+          <h3>Nhận món bằng mã QR</h3>
+          <p class="count">Mỗi đơn có một mã định danh riêng, quét là xong, không cần đối chiếu thủ công.</p>
+        </div>
+        <div class="stall-card">
+          <div class="stall-thumb vat" data-icon="wallet"></div>
+          <h3>Ví CampusFood tiện lợi</h3>
+          <p class="count">Nạp sẵn số dư, thanh toán một chạm mà không cần tiền mặt lẻ.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script>
+  function renderStalls(){
+    const cats = [
+      { key:'mon', title:'Đồ ăn', thumb:'mon', icon:'bowl' },
+      { key:'uong', title:'Đồ uống', thumb:'uong', icon:'cup' },
+      { key:'vat', title:'Đồ ăn vặt', thumb:'vat', icon:'fries' },
+    ];
+    const products = cfGetProducts();
+    document.getElementById('category-stalls').innerHTML = cats.map(c => {
+      const count = products.filter(p => p.category === c.key).length;
+      return `
+      <div class="stall-card">
+        <div class="stall-thumb ${c.thumb}">${CF_ICONS[c.icon]}</div>
+        <h3>${c.title}</h3>
+        <p class="count">${count} món đang phục vụ</p>
+        <a href="menu.html?cat=${c.key}" class="btn btn-outline btn-sm">Xem danh mục</a>
+      </div>`;
+    }).join('');
+  }
+
+  function renderFeatured(){
+    const products = cfGetProducts().filter(p => p.badge === 'bestseller').slice(0,4);
+    const fill = products.length < 4 ? cfGetProducts().slice(0, 4 - products.length) : [];
+    document.getElementById('featured-products').innerHTML = [...products, ...fill].map(cfProductCardHtml).join('');
+    cfBindProductCardEvents();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderStalls();
+    renderFeatured();
+    cfFillIcons();
+  });
+</script>
+</body>
+</html>
