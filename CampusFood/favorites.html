@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Món yêu thích — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/enhance.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body data-page="favorites">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / Món yêu thích</div>
+    <h1>Món yêu thích của bạn</h1>
+    <p class="text-muted mt-8">Nhấn 🤍 trên bất kỳ món nào để lưu vào đây.</p>
+  </div>
+
+  <section class="section" style="padding-top:20px;">
+    <div class="container">
+      <div id="fav-count" class="text-muted" style="font-size:13.5px;margin-bottom:16px;"></div>
+      <div class="product-grid" id="fav-grid"></div>
+      <div class="empty-state" id="fav-empty" style="display:none;">
+        <span data-icon="emptycart"></span>
+        <h3>Chưa có món yêu thích</h3>
+        <p>Hãy dạo quanh thực đơn và nhấn 🤍 để lưu món bạn thích.</p>
+        <a href="menu.html" class="btn btn-primary">Khám phá thực đơn</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/favorites.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    cfRenderFavoritesPage();
+    cfFillIcons();
+  });
+</script>
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>   <!-- ← THÊM DÒNG NÀY --></body>
+</html>

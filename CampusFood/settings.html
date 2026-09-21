@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cài đặt — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/enhance.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body data-page="settings">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / Cài đặt</div>
+    <h1>Cài đặt</h1>
+  </div>
+
+  <section class="section" style="padding-top:20px;">
+    <div class="container" style="max-width:720px;">
+
+      <div class="panel">
+        <h3 style="font-size:17px;margin-bottom:6px;">👤 Tài khoản</h3>
+        <p class="text-muted" style="font-size:13.5px;">
+          <b id="set-name">—</b> · <span id="set-email">—</span>
+        </p>
+        <a href="profile.html" class="btn btn-outline btn-sm mt-8">Chỉnh sửa thông tin</a>
+      </div>
+
+      <div class="panel">
+        <h3 style="font-size:17px;margin-bottom:14px;">🎨 Giao diện</h3>
+        <div class="set-row">
+          <div>
+            <b>Chế độ hiển thị</b>
+            <p class="text-muted" style="font-size:13px;">Sáng hoặc tối</p>
+          </div>
+          <div class="segmented">
+            <button data-theme-btn="light" class="seg-btn">☀️ Sáng</button>
+            <button data-theme-btn="dark"  class="seg-btn">🌙 Tối</button>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="set-row">
+          <div>
+            <b>Giảm hiệu ứng chuyển động</b>
+            <p class="text-muted" style="font-size:13px;">Tắt animation cho dễ nhìn</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-setting="reduceMotion">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 style="font-size:17px;margin-bottom:14px;">🔔 Thông báo</h3>
+        <div class="set-row">
+          <div>
+            <b>Email</b>
+            <p class="text-muted" style="font-size:13px;">Nhận xác nhận đơn qua email</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-setting="notifyEmail">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+        <hr class="divider">
+        <div class="set-row">
+          <div>
+            <b>SMS</b>
+            <p class="text-muted" style="font-size:13px;">Nhận tin nhắn khi đơn sẵn sàng</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-setting="notifySMS">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+        <hr class="divider">
+        <div class="set-row">
+          <div>
+            <b>Khuyến mãi</b>
+            <p class="text-muted" style="font-size:13px;">Nhận thông báo ưu đãi mới</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-setting="notifyPromo">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 style="font-size:17px;margin-bottom:14px;">🌐 Ngôn ngữ</h3>
+        <div class="set-row">
+          <div><b>Ngôn ngữ hiển thị</b></div>
+          <select data-setting="language" class="select-sort">
+            <option value="vi">Tiếng Việt</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 style="font-size:17px;margin-bottom:14px;">📱 Ứng dụng</h3>
+        <p class="text-muted" style="font-size:13px;margin-bottom:12px;">
+          Cài CampusFood như một ứng dụng — mở nhanh từ màn hình chính.
+        </p>
+        <button class="btn btn-outline btn-block" id="btn-install-pwa">📲 Cài đặt ứng dụng</button>
+      </div>
+
+      <div class="panel" style="border:1.5px solid #fca5a5; background:#fef2f2;">
+        <h3 style="font-size:17px;margin-bottom:14px;color:#b91c1c;">⚠️ Vùng nguy hiểm</h3>
+        <button class="btn btn-outline btn-block mt-8" id="btn-clear-cart" style="border-color:#fca5a5;color:#b91c1c;">🗑️ Xoá giỏ hàng hiện tại</button>
+        <button class="btn btn-outline btn-block mt-8" id="btn-clear-history" style="border-color:#fca5a5;color:#b91c1c;">🗑️ Xoá lịch sử đơn hàng</button>
+        <button class="btn btn-outline btn-block mt-8" id="btn-delete-account" style="border-color:#dc2626;background:#dc2626;color:#fff;">🗑️ Xoá vĩnh viễn tài khoản</button>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>
+<script>
+  // Nút cài PWA
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btn-install-pwa');
+    if (btn) btn.addEventListener('click', async () => {
+      if (!deferredPrompt){
+        cfToast('Trình duyệt không hỗ trợ hoặc app đã được cài.', 'error');
+        return;
+      }
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') cfToast('Cảm ơn bạn đã cài đặt!', 'success');
+      deferredPrompt = null;
+    });
+  });
+</script>
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>   <!-- ← THÊM DÒNG NÀY --></body>
+</html>

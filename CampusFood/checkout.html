@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanh toán — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="cart">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / <a href="cart.html">Giỏ hàng</a> / Thanh toán</div>
+    <h1>Xác nhận &amp; thanh toán</h1>
+  </div>
+
+  <section class="section" style="padding-top:20px;">
+    <form id="checkout-form" class="container split-panel">
+      <div>
+        <div class="panel">
+          <h3 style="font-size:17px;margin-bottom:16px;">Thông tin nhận món</h3>
+          <div id="guest-fields" style="display:none;">
+            <div class="field-row">
+              <div class="field"><label>Họ tên</label><input type="text" id="guest-name" placeholder="Nguyễn Văn A"></div>
+              <div class="field"><label>Số điện thoại *</label><input type="tel" id="guest-phone" placeholder="09xxxxxxxx">
+                <div class="field-error">Vui lòng nhập số điện thoại để căn tin liên hệ khi cần.</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-12" style="padding:14px; background:var(--pine-100); border-radius:10px;">
+            <span data-icon="clock" style="color:var(--pine-900);"></span>
+            <span style="font-size:14px;">Khung giờ nhận món: <b id="checkout-slot">—</b></span>
+          </div>
+          <div class="flex items-center gap-12 mt-8" id="priority-note" style="display:none; padding:14px; background:var(--gold-100); border-radius:10px;">
+            <span data-icon="star" style="color:var(--citrus-700);"></span>
+            <span style="font-size:13.5px; color:var(--citrus-700); font-weight:700;">Đơn của bạn (giảng viên) sẽ được căng tin ưu tiên xử lý trước.</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3 style="font-size:17px;margin-bottom:16px;">Phương thức thanh toán</h3>
+
+          <label class="radio-card selected" style="margin-bottom:12px;">
+            <input type="radio" name="pay" value="cod" checked>
+            <span class="rc-icon" data-icon="wallet"></span>
+            <span style="flex:1;">
+              <span class="rc-title" style="display:block;">💵 Tiền mặt</span>
+              <span class="rc-sub">Thanh toán khi nhận món tại quầy</span>
+            </span>
+          </label>
+
+          <label class="radio-card" style="margin-bottom:12px;">
+            <input type="radio" name="pay" value="ewallet">
+            <span class="rc-icon" data-icon="qr"></span>
+            <span style="flex:1;">
+              <span class="rc-title" style="display:block;">📱 Ví điện tử</span>
+              <span class="rc-sub">MoMo · ZaloPay · VNPay — quét QR để thanh toán</span>
+            </span>
+          </label>
+
+          <label class="radio-card" id="pay-campuswallet">
+            <input type="radio" name="pay" value="campuswallet">
+            <span class="rc-icon" data-icon="wallet"></span>
+            <span style="flex:1;">
+              <span class="rc-title" style="display:block;">💳 Ví CampusFood</span>
+              <span class="rc-sub" id="wallet-balance-sub">Đăng nhập để dùng Ví CampusFood</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <h3 style="font-size:17px;margin-bottom:6px;">Phiếu gọi món</h3>
+          <div id="checkout-items"></div>
+          <div class="summary-row mt-16"><span>Tạm tính</span><span id="co-subtotal">0đ</span></div>
+          <div class="summary-row"><span>Phí dịch vụ</span><span id="co-fee">0đ</span></div>
+          <div class="summary-row" id="co-discount-row" style="display:none;color:var(--success);"><span>Mã giảm giá</span><span id="co-discount">0đ</span></div>
+          <div class="summary-row total"><span>Tổng tiền</span><span id="co-total">0đ</span></div>
+          <button type="submit" class="btn btn-primary btn-block mt-24">THANH TOÁN</button>
+          <a href="cart.html" class="btn btn-ghost btn-block mt-8">← Sửa giỏ hàng</a>
+        </div>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<!-- Modal thanh toán QR -->
+<div class="modal-overlay" id="qr-pay-modal">
+  <div class="modal-box" style="text-align:center;max-width:340px;">
+    <p class="eyebrow-label">THANH TOÁN ĐƠN HÀNG</p>
+    <h3 style="margin:8px 0 4px;">Số tiền: <span id="qr-pay-amount">0đ</span></h3>
+    <div style="width:190px;height:190px;margin:18px auto;background:repeating-linear-gradient(45deg,var(--pine-900) 0 8px, var(--paper) 8px 16px); border-radius:12px; display:flex; align-items:center; justify-content:center;">
+      <div style="width:150px;height:150px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+        <span data-icon="qr" style="width:100px;height:100px;color:var(--pine-900);"></span>
+      </div>
+    </div>
+    <p style="font-size:13px;">Quét mã QR bằng ứng dụng ví điện tử để thanh toán</p>
+    <div class="modal-actions mt-24" style="flex-direction:column;">
+      <button type="button" class="btn btn-primary btn-block" id="qr-pay-confirm">Tôi đã thanh toán</button>
+      <button type="button" class="btn btn-ghost btn-block mt-8" id="qr-pay-cancel">Huỷ</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/checkout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    cfRenderCheckoutPage();
+    cfFillIcons();
+  });
+</script>
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>   <!-- ← THÊM DÒNG NÀY --></body>
+</html>

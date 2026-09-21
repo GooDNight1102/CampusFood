@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo doanh thu — Quản trị CampusFood</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div><h1>Báo cáo doanh thu</h1><p class="sub">Theo dõi doanh thu theo ngày/tuần và món bán chạy.</p></div>
+    </div>
+
+    <div class="stat-grid cols-3">
+      <div class="stat-card"><div class="label">Tổng doanh thu (7 ngày)</div><div class="value" id="rev-total">0đ</div></div>
+      <div class="stat-card"><div class="label">Tổng số đơn</div><div class="value" id="rev-orders">0</div></div>
+      <div class="stat-card"><div class="label">Giá trị đơn trung bình</div><div class="value" id="rev-avg">0đ</div></div>
+    </div>
+
+    <div class="admin-grid-2">
+      <div class="admin-panel">
+        <div class="admin-panel-head"><h3>Doanh thu theo ngày</h3></div>
+        <canvas class="chart-canvas" id="revenue-bar-chart" height="230"></canvas>
+      </div>
+      <div class="admin-panel">
+        <div class="admin-panel-head"><h3>Món bán chạy nhất</h3></div>
+        <div id="revenue-top-products"></div>
+      </div>
+    </div>
+
+    <div class="admin-panel mt-24">
+      <div class="admin-panel-head"><h3>Chi tiết theo ngày</h3></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Ngày</th><th>Số đơn</th><th>Doanh thu</th></tr></thead>
+          <tbody id="revenue-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/products.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/promotions.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/orders.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!cfAdminBoot('revenue', ['admin'])) return;
+    cfFillIcons();
+    cfRenderRevenueAdmin();
+  });
+</script>
+</body>
+</html>

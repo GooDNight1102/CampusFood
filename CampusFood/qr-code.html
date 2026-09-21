@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quét mã QR — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="qr">
+
+<div id="site-header"></div>
+
+<main>
+  <section class="section">
+    <div class="container text-center" style="max-width:520px;">
+      <span class="eyebrow-label">ĐẶT MÓN KHÔNG CẦN GÕ ĐỊA CHỈ</span>
+      <h1 class="mt-8" style="font-size:32px;">Quét mã QR để đặt đồ ăn</h1>
+      <p class="text-muted mt-16">In mã này và dán tại bàn, cổng vào hoặc quầy căng tin — ai quét cũng vào thẳng thực đơn CampusFood.</p>
+
+      <div class="panel mt-32" style="display:inline-block; padding:28px;">
+        <div id="qr-canvas-wrap" style="width:240px;height:240px;display:flex;align-items:center;justify-content:center;background:#fff;"></div>
+        <p class="mt-16" style="font-weight:700; font-family:var(--font-display); font-size:16px;">campusfood.example.com</p>
+      </div>
+
+      <div class="mt-24">
+        <button class="btn btn-primary" id="dl-qr">TẢI QR CODE</button>
+      </div>
+
+      <div class="panel mt-32" style="text-align:left;">
+        <div class="flex items-center gap-12">
+          <span data-icon="info" style="color:var(--pine-900);"></span>
+          <p style="font-size:13.5px;">Khi website được triển khai lên hosting thật, mã QR này cần được tạo lại theo đúng địa chỉ (URL) thực tế của trang.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const targetUrl = window.location.origin + window.location.pathname.replace('qr-code.html','index.html');
+    const wrap = document.getElementById('qr-canvas-wrap');
+    if (window.QRCode){
+      new QRCode(wrap, { text: targetUrl, width: 210, height: 210, colorDark:'#17301F', colorLight:'#ffffff' });
+    } else {
+      // dự phòng nếu không tải được thư viện ngoài (mất mạng)
+      wrap.innerHTML = `<span data-icon="qr" style="width:120px;height:120px;color:var(--pine-900);"></span>`;
+      cfFillIcons();
+    }
+
+    document.getElementById('dl-qr').addEventListener('click', () => {
+      const img = wrap.querySelector('img, canvas');
+      if (!img){ cfToast('Không thể tải QR lúc này, vui lòng thử lại.', 'error'); return; }
+      const link = document.createElement('a');
+      link.download = 'campusfood-qr.png';
+      link.href = img.tagName === 'CANVAS' ? img.toDataURL('image/png') : img.src;
+      link.click();
+    });
+  });
+</script>
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>   <!-- ← THÊM DÒNG NÀY --></body>
+</html>

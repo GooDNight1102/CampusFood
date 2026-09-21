@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi tiết món ăn — CampusFood</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/enhance.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="menu">
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container page-head">
+    <div class="breadcrumb"><a href="index.html">Trang chủ</a> / <a href="menu.html">Thực đơn</a> / <span id="pd-crumb"></span></div>
+  </div>
+
+  <section class="section" style="padding-top:16px; padding-bottom:0;">
+    <div class="container split-panel-equal" id="pd-wrap">
+      <!-- filled by JS -->
+    </div>
+  </section>
+
+  <div class="pd-sticky-bar" id="pd-sticky-bar" style="display:none;">
+    <div class="wrap">
+      <span class="psb-price" id="psb-price">0đ</span>
+      <div class="qty-stepper">
+        <button type="button" id="pd-dec">−</button>
+        <span id="pd-qty">1</span>
+        <button type="button" id="pd-inc">+</button>
+      </div>
+      <button class="btn btn-primary" id="pd-add" style="flex:1;">Thêm vào giỏ hàng</button>
+    </div>
+  </div>
+
+  <section class="section" style="border-top:1px solid var(--line);">
+    <div class="container" style="max-width:760px;">
+      <div class="section-head"><div><span class="eyebrow-label">ĐÁNH GIÁ</span><h2>Khách hàng nói gì</h2></div></div>
+      <div class="pd-reviews" id="pd-reviews"></div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--paper); border-top:1px solid var(--line);">
+    <div class="container">
+      <div class="section-head"><div><span class="eyebrow-label">GỢI Ý</span><h2>Món tương tự</h2></div></div>
+      <div class="product-grid" id="pd-related"></div>
+    </div>
+  </section>
+</main>
+
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let PD_PRODUCT = null;
+  let PD_QTY = 1;
+  let PD_SELECTED_SIZE = null;
+  let PD_SELECTED_TOPPINGS = [];
+
+  function renderProductDetail(){
+    const id = new URLSearchParams(location.search).get('id');
+    const p = cfGetProductById(id);
+    if (!p){
+      document.getElementById('pd-wrap').innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>Không tìm thấy món ăn</h3><p>Món ăn này có thể đã bị gỡ khỏi thực đơn.</p><a href="menu.html" class="btn btn-primary">Về thực đơn</a></div>`;
+      document.getElementById('pd-reviews').parentElement.parentElement.style.display = 'none';
+      return;
+    }
+    PD_PRODUCT = p;
+    PD_QTY = 1;
+    PD_SELECTED_SIZE = p.sizes ? p.sizes[0].id : null;
+    PD_SELECTED_TOPPINGS = [];
+
+    document.getElementById('pd-crumb').textContent = p.name;
+    document.title = p.name + ' — CampusFood';
+
+    const out = p.stock <= 0;
+    const badgeHtml = out ? '<span class="badge badge-out">Hết hàng</span>'
+      : p.badge==='bestseller' ? '<span class="badge badge-bestseller">Bán chạy</span>'
+      : p.badge==='new' ? '<span class="badge badge-new">Mới</span>' : '';
+    const hasDiscount = p.oldPrice && p.oldPrice > p.price;
+
+    // Gallery: dùng "gallery" nếu có, không thì dùng ảnh chính duy nhất
+    const gallery = (p.gallery && p.gallery.length) ? p.gallery : (p.image ? [p.image] : []);
+
+    document.getElementById('pd-wrap').innerHTML = `
+      <div class="pd-gallery">
+        <div class="product-thumb pd-gallery-main" id="pd-main-thumb" style="height:360px;border-radius:16px;--tc1:${cfThumbGradient(p.category).split(',')[0]};--tc2:${cfThumbGradient(p.category).split(',')[1]};">
+          ${badgeHtml}
+          <span style="width:96px;height:96px;" data-icon="${cfCategoryIconKey(p.category)}"></span>
+          ${gallery[0] ? `<img class="thumb-img" id="pd-main-img" src="${gallery[0]}" alt="${p.name}" onerror="this.remove()">` : ''}
+        </div>
+        ${gallery.length > 1 ? `<div class="pd-thumb-strip" id="pd-thumb-strip">
+          ${gallery.map((src,i) => `<button type="button" data-src="${src}" class="${i===0?'active':''}"><img src="${src}" alt=""></button>`).join('')}
+        </div>` : ''}
+      </div>
+      <div>
+        <span class="product-cat">${cfCategoryLabel(p.category).toUpperCase()}</span>
+        <h1 style="font-size:30px;margin-top:8px;">${p.name}</h1>
+        <div class="product-meta mt-16">
+          <span class="rating">${CF_ICONS.star} ${p.rating.toFixed(1)}</span><span>·</span><span>${p.sold} đã bán</span><span>·</span>
+          <span>${out ? 'Hết hàng' : `Còn ${p.stock} phần`}</span>
+        </div>
+        <p class="mt-16" style="color:var(--ink-70);font-size:15px;line-height:1.65;">${p.desc}</p>
+        <div class="mt-24" style="display:flex;align-items:baseline;gap:12px;">
+          ${hasDiscount ? `<span class="price-old" style="font-size:16px;">${cfFormatVND(p.oldPrice)}</span>` : ''}
+          <span class="price" id="pd-price-display" style="font-size:30px;">${cfFormatVND(p.price)}</span>
+        </div>
+
+        <div class="pd-options" id="pd-options"></div>
+
+        <a href="menu.html" class="btn btn-ghost mt-24">← Quay lại thực đơn</a>
+      </div>`;
+    cfFillIcons();
+
+    renderOptions();
+    updatePriceDisplay();
+
+    // Gallery: đổi ảnh chính khi bấm thumbnail
+    document.querySelectorAll('#pd-thumb-strip [data-src]').forEach(btn => btn.addEventListener('click', () => {
+      document.getElementById('pd-main-img').src = btn.dataset.src;
+      document.querySelectorAll('#pd-thumb-strip button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }));
+
+    // Thanh dính đáy: chỉ hiện khi còn hàng
+    const stickyBar = document.getElementById('pd-sticky-bar');
+    stickyBar.style.display = out ? 'none' : 'block';
+    document.getElementById('pd-qty').textContent = PD_QTY;
+    document.getElementById('pd-inc').addEventListener('click', () => { if (PD_QTY < p.stock) { PD_QTY++; document.getElementById('pd-qty').textContent = PD_QTY; } });
+    document.getElementById('pd-dec').addEventListener('click', () => { if (PD_QTY > 1) { PD_QTY--; document.getElementById('pd-qty').textContent = PD_QTY; } });
+    document.getElementById('pd-add').addEventListener('click', () => {
+      const res = cfAddToCart(p.id, PD_QTY, { sizeId: PD_SELECTED_SIZE, toppingIds: PD_SELECTED_TOPPINGS });
+      if (res.ok) cfToast(`Đã thêm ${PD_QTY} ${p.name} vào giỏ hàng.`, 'success');
+      else cfToast(res.message, 'error');
+    });
+
+    renderReviews(p);
+
+    const related = cfGetProducts().filter(x => x.category === p.category && x.id !== p.id).slice(0,4);
+    document.getElementById('pd-related').innerHTML = related.map(cfProductCardHtml).join('');
+    cfBindProductCardEvents();
+  }
+
+  function renderOptions(){
+    const p = PD_PRODUCT;
+    const wrap = document.getElementById('pd-options');
+    let html = '';
+    if (p.sizes){
+      html += `<div class="pd-option-group">
+        <h4>Chọn size</h4>
+        <div class="pd-option-list">
+          ${p.sizes.map(s => `<button type="button" class="pd-option-chip ${s.id===PD_SELECTED_SIZE?'selected':''}" data-size="${s.id}">
+            ${s.label} ${s.delta > 0 ? `<span class="opt-extra">+${cfFormatVND(s.delta)}</span>` : ''}
+          </button>`).join('')}
+        </div>
+      </div>`;
+    }
+    if (p.toppings){
+      html += `<div class="pd-option-group">
+        <h4>Thêm topping (không bắt buộc)</h4>
+        <div class="pd-option-list">
+          ${p.toppings.map(t => `<button type="button" class="pd-option-chip ${PD_SELECTED_TOPPINGS.includes(t.id)?'selected':''}" data-topping="${t.id}">
+            ${t.label} <span class="opt-extra">+${cfFormatVND(t.price)}</span>
+          </button>`).join('')}
+        </div>
+      </div>`;
+    }
+    wrap.innerHTML = html;
+
+    wrap.querySelectorAll('[data-size]').forEach(btn => btn.addEventListener('click', () => {
+      PD_SELECTED_SIZE = btn.dataset.size;
+      wrap.querySelectorAll('[data-size]').forEach(b => b.classList.toggle('selected', b.dataset.size === PD_SELECTED_SIZE));
+      updatePriceDisplay();
+    }));
+    wrap.querySelectorAll('[data-topping]').forEach(btn => btn.addEventListener('click', () => {
+      const tid = btn.dataset.topping;
+      const i = PD_SELECTED_TOPPINGS.indexOf(tid);
+      if (i === -1) PD_SELECTED_TOPPINGS.push(tid); else PD_SELECTED_TOPPINGS.splice(i,1);
+      btn.classList.toggle('selected');
+      updatePriceDisplay();
+    }));
+  }
+
+  function updatePriceDisplay(){
+    const unit = cfLineUnitPrice(PD_PRODUCT, { sizeId: PD_SELECTED_SIZE, toppingIds: PD_SELECTED_TOPPINGS });
+    document.getElementById('pd-price-display').textContent = cfFormatVND(unit);
+    document.getElementById('psb-price').textContent = cfFormatVND(unit);
+  }
+
+  function renderReviews(p){
+    const wrap = document.getElementById('pd-reviews');
+    const reviews = cfGetProductReviews(p.id);
+    if (reviews.length === 0){
+      wrap.innerHTML = `<div class="empty-state" style="padding:30px 10px;"><span data-icon="star"></span><h3>Chưa có đánh giá</h3><p>Hãy là người đầu tiên đánh giá món này sau khi nhận đơn.</p></div>`;
+      cfFillIcons(wrap);
+      return;
+    }
+    const avg = reviews.reduce((s,r) => s + r.stars, 0) / reviews.length;
+    const starsHtml = (n) => Array.from({length:5}).map((_,i) => i < Math.round(n) ? CF_ICONS.star : CF_ICONS.star.replace('fill="currentColor"','fill="none" stroke="currentColor" stroke-width="1.5"')).join('');
+    wrap.innerHTML = `
+      <div class="pd-review-summary">
+        <div class="pd-review-score">
+          <b>${avg.toFixed(1)}</b>
+          <div class="stars">${starsHtml(avg)}</div>
+        </div>
+        <div class="text-muted" style="font-size:13px;">${reviews.length} lượt đánh giá từ khách hàng đã đặt món này.</div>
+      </div>
+      ${reviews.map(r => `
+        <div class="pd-review-item">
+          <div class="ri-head">
+            <span class="ri-user">${r.user}</span>
+            <span class="stars">${starsHtml(r.stars)}</span>
+          </div>
+          <p style="font-size:14px;color:var(--ink-70);">${r.comment}</p>
+        </div>`).join('')}`;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderProductDetail);
+</script>
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>   <!-- ← THÊM DÒNG NÀY -->
+</body>
+</html>

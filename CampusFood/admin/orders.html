@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý đơn hàng — Quản trị CampusFood</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div><h1>Quản lý đơn hàng</h1><p class="sub">Xác nhận, từ chối và cập nhật trạng thái đơn theo thời gian thực.</p></div>
+    </div>
+
+    <div class="admin-panel">
+      <div class="toolbar">
+        <select id="order-filter-status">
+          <option value="all">Tất cả trạng thái</option>
+          <option value="placed">Chờ xác nhận</option>
+          <option value="confirmed">Đã xác nhận</option>
+          <option value="preparing">Đang chuẩn bị</option>
+          <option value="ready">Đã sẵn sàng</option>
+          <option value="done">Đã nhận</option>
+          <option value="cancelled">Đã huỷ</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Tổng tiền</th><th>Thanh toán</th><th>Giờ đặt</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody id="orders-admin-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="order-detail-modal">
+  <div class="modal-box">
+    <h3>Chi tiết đơn <span id="od-code"></span></h3>
+    <p id="od-customer"></p>
+    <div class="flex items-center gap-8 mt-8" style="margin-bottom:14px;">
+      <span data-icon="clock"></span><span>Khung giờ nhận: <b id="od-slot"></b></span>
+    </div>
+    <div id="od-items"></div>
+    <div class="summary-row total"><span>Tổng cộng</span><span id="od-total"></span></div>
+    <div class="modal-actions"><button class="btn btn-primary" id="od-close">Đóng</button></div>
+  </div>
+</div>
+
+<script src="../js/products.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/promotions.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/orders.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!cfAdminBoot('orders', ['staff','admin'])) return;
+    cfFillIcons();
+    cfRenderOrdersAdmin();
+    document.getElementById('od-close').addEventListener('click', () => document.getElementById('order-detail-modal').classList.remove('open'));
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusFood — Đặt món nhanh, ăn ngon tại trường</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/enhance.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="home">
+
+<div id="site-header"></div>
+
+<main>
+  <!-- ===== Hero: địa chỉ giao, tìm kiếm, carousel banner ===== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <button class="hero-address" id="hero-address" type="button">
+          <span data-icon="location"></span>
+          Giao đến: <b id="hero-address-text">Căng tin — Toà A, Cơ sở chính</b>
+          <span data-icon="chevrondown"></span>
+        </button>
+        <h1 class="hero-title">Đặt món nhanh<br>ăn ngon <span class="accent">tại trường</span></h1>
+        <p class="hero-sub">Đặt đồ ăn trực tuyến, thanh toán tiện lợi và chốt sẵn khung giờ lấy món — không còn xếp hàng dài giữa giờ ra chơi.</p>
+
+        <form class="hero-search" id="hero-search-form">
+          <span data-icon="search"></span>
+          <input type="text" id="hero-search-input" placeholder="Tìm 'cơm gà', 'trà đào', 'combo'...">
+          <button type="submit">Tìm món</button>
+        </form>
+
+        <div class="hero-stats">
+          <div class="hero-stat"><b>&lt; 5 phút</b><span>Thời gian giao dịch tại quầy</span></div>
+          <div class="hero-stat"><b>21+</b><span>Món &amp; combo mỗi ngày</span></div>
+          <div class="hero-stat"><b>3</b><span>Nhóm người dùng phục vụ</span></div>
+        </div>
+      </div>
+
+      <div class="hero-carousel" id="hero-carousel">
+        <div class="carousel-track" id="carousel-track">
+          <div class="carousel-slide cs-1">
+            <span class="cs-eyebrow">COMBO TIẾT KIỆM</span>
+            <h2>Ghép món, tiết kiệm đến 8.000đ</h2>
+            <p>Combo Cơm gà + Trà đào, Phở bò + Cà phê sữa... chọn sẵn, khỏi tính toán.</p>
+            <a href="menu.html?cat=combo" class="btn btn-primary">Xem combo ngay</a>
+          </div>
+          <div class="carousel-slide cs-2">
+            <span class="cs-eyebrow">FLASH SALE HÔM NAY</span>
+            <h2>Giảm giá món bán chạy trong khung giờ vàng</h2>
+            <p>Cơm gà sốt cay, Phở bò, Trà đào... giá tốt hơn, số lượng có hạn.</p>
+            <a href="#flash-sale" class="btn btn-primary">Săn deal ngay</a>
+          </div>
+          <div class="carousel-slide cs-3">
+            <span class="cs-eyebrow">MÃ GIẢM GIÁ</span>
+            <h2>Nhập mã, giảm ngay khi thanh toán</h2>
+            <p>CF20K, FREESHIP, GIAM10... áp dụng ngay tại trang giỏ hàng.</p>
+            <a href="#voucher" class="btn btn-primary">Xem mã ưu đãi</a>
+          </div>
+        </div>
+        <button class="carousel-arrow prev" id="carousel-prev" aria-label="Trước" type="button"><span data-icon="chevronleft"></span></button>
+        <button class="carousel-arrow next" id="carousel-next" aria-label="Sau" type="button"><span data-icon="chevronright"></span></button>
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Danh mục dạng icon tròn, cuộn ngang ===== -->
+  <section class="section" style="padding-top:12px; padding-bottom:20px;">
+    <div class="container">
+      <div class="category-scroll" id="category-bubbles"></div>
+    </div>
+  </section>
+
+  <!-- ===== Voucher ===== -->
+  <section class="section" id="voucher" style="padding-top:8px;">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">ƯU ĐÃI HÔM NAY</span>
+          <h2>Mã giảm giá dành cho bạn</h2>
+        </div>
+      </div>
+      <div class="voucher-scroll" id="voucher-scroll"></div>
+    </div>
+  </section>
+
+  <!-- ===== Flash Sale ===== -->
+  <section class="section" id="flash-sale" style="background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <div class="flash-head">
+        <div class="flash-title"><span data-icon="bolt"></span> Flash Sale</div>
+        <div class="flash-countdown"><span data-icon="clock"></span> Kết thúc sau <span id="flash-countdown">00:00:00</span></div>
+      </div>
+      <div class="product-grid" id="flash-sale-products"></div>
+    </div>
+  </section>
+
+  <!-- ===== Combo ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">GHÉP MÓN, LỢI HƠN</span>
+          <h2>Combo tiết kiệm</h2>
+          <p>Chọn sẵn, khỏi phải tính — mua combo rẻ hơn mua lẻ từng món.</p>
+        </div>
+        <a href="menu.html?cat=combo" class="btn btn-ghost">Xem tất cả combo →</a>
+      </div>
+      <div class="combo-grid" id="combo-products"></div>
+    </div>
+  </section>
+
+  <!-- ===== Món nổi bật ===== -->
+  <section class="section" style="background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">HÔM NAY BÁN CHẠY</span>
+          <h2>Món ăn nổi bật</h2>
+          <p>Được sinh viên và giảng viên đặt nhiều nhất tuần này.</p>
+        </div>
+        <a href="menu.html" class="btn btn-ghost">Xem thêm →</a>
+      </div>
+      <div class="product-grid" id="featured-products"></div>
+    </div>
+  </section>
+
+  <!-- ===== Vì sao chọn CampusFood ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow-label">VÌ SAO CHỌN CAMPUSFOOD</span>
+          <h2>Mọi khâu, một điểm chạm</h2>
+        </div>
+      </div>
+      <div class="stall-row">
+        <div class="stall-card">
+          <div class="stall-thumb mon" data-icon="clock"></div>
+          <h3>Chốt giờ, không chờ đợi</h3>
+          <p class="count">Chọn khung giờ nhận món phù hợp giờ nghỉ của bạn, đến lấy là có ngay.</p>
+        </div>
+        <div class="stall-card">
+          <div class="stall-thumb uong" data-icon="qr"></div>
+          <h3>Nhận món bằng mã QR</h3>
+          <p class="count">Mỗi đơn có một mã định danh riêng, quét là xong, không cần đối chiếu thủ công.</p>
+        </div>
+        <div class="stall-card">
+          <div class="stall-thumb vat" data-icon="wallet"></div>
+          <h3>Ví CampusFood tiện lợi</h3>
+          <p class="count">Nạp sẵn số dư, thanh toán một chạm mà không cần tiền mặt lẻ.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="floating-cart"></div>
+<div id="bottom-nav"></div>
+<div id="site-footer"></div>
+
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script>
+  function renderFeatured(){
+    const products = cfGetProducts().filter(p => p.badge === 'bestseller' && p.category !== 'combo').slice(0,4);
+    document.getElementById('featured-products').innerHTML = products.map(cfProductCardHtml).join('');
+    cfBindProductCardEvents();
+  }
+
+  function renderCombos(){
+    const combos = cfGetProducts().filter(p => p.category === 'combo').slice(0,3);
+    document.getElementById('combo-products').innerHTML = combos.map(cfProductCardHtml).join('');
+    cfBindProductCardEvents();
+  }
+
+  function renderFlashSale(){
+    const products = cfGetFlashSaleProducts();
+    document.getElementById('flash-sale-products').innerHTML = products.map(cfProductCardHtml).join('');
+    cfBindProductCardEvents();
+    cfStartCountdown('flash-countdown', cfGetFlashSaleEndTime());
+  }
+
+  function renderVouchers(){
+    document.getElementById('voucher-scroll').innerHTML = CF_VOUCHERS.map(v => `
+      <div class="voucher-card">
+        <div class="vc-icon" data-icon="ticket"></div>
+        <div class="vc-body">
+          <b>${v.label}</b>
+          <p>${v.desc}</p>
+          <span class="vc-code">${v.code}</span>
+        </div>
+      </div>`).join('');
+    cfFillIcons(document.getElementById('voucher-scroll'));
+  }
+
+  function renderCategoryBubbles(){
+    document.getElementById('category-bubbles').innerHTML = cfCategoryBubblesHtml('');
+    cfFillIcons();
+  }
+
+  /* ---------- Carousel banner ---------- */
+  function initCarousel(){
+    const track = document.getElementById('carousel-track');
+    const slides = track.children.length;
+    const dotsWrap = document.getElementById('carousel-dots');
+    let index = 0, timer;
+
+    dotsWrap.innerHTML = Array.from({length:slides}).map((_,i) => `<button type="button" data-dot="${i}" class="${i===0?'active':''}"></button>`).join('');
+
+    function goTo(i){
+      index = (i + slides) % slides;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dotsWrap.querySelectorAll('button').forEach((d,di) => d.classList.toggle('active', di === index));
+    }
+    function next(){ goTo(index + 1); }
+    function restart(){ clearInterval(timer); timer = setInterval(next, 5000); }
+
+    document.getElementById('carousel-next').addEventListener('click', () => { next(); restart(); });
+    document.getElementById('carousel-prev').addEventListener('click', () => { goTo(index - 1); restart(); });
+    dotsWrap.querySelectorAll('[data-dot]').forEach(d => d.addEventListener('click', () => { goTo(parseInt(d.dataset.dot,10)); restart(); }));
+    restart();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCategoryBubbles();
+    renderVouchers();
+    renderFlashSale();
+    renderCombos();
+    renderFeatured();
+    initCarousel();
+    cfFillIcons();
+
+    document.getElementById('hero-search-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = document.getElementById('hero-search-input').value.trim();
+      window.location.href = 'menu.html' + (q ? ('?q=' + encodeURIComponent(q)) : '');
+    });
+    document.getElementById('hero-address').addEventListener('click', () => {
+      cfToast('Căng tin hiện chỉ phục vụ 1 cơ sở duy nhất (theo phạm vi MVP).', 'default');
+    });
+  });
+</script>
+<script src="js/products.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/promotions.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/main.js"></script>
+<script src="js/enhancements.js"></script>   <!-- ← THÊM DÒNG NÀY -->
+</body>
+</html>
