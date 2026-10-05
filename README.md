@@ -61,7 +61,7 @@ Dự án phù hợp cho:
 
 ## 🎬 Demo
 
-> 🚧 **Đang cập nhật** — Link demo sẽ được thêm sau khi deploy lên Netlify/GitHub Pages.
+> https://goodnight1102.github.io/CampusFood/CampusFood/
 
 **Tài khoản demo:**
 
